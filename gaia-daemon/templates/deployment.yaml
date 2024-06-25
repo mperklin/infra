@@ -45,6 +45,13 @@ spec:
           {{- toYaml .Values.securityContext | nindent 12 }}
         image: {{ .Values.image.name }}:{{ .Values.image.tag }}@sha256:{{ .Values.image.hash }}
         imagePullPolicy: IfNotPresent
+        command:
+          - /entrypoint.sh
+          - --minimum-gas-prices=0.001uatom
+          - --grpc.address=0.0.0.0:9090
+          {{- range $flag := .Values.flags }}
+          - {{ $flag }}
+          {{- end }}
         volumeMounts:
           - name: data
             mountPath: /root/.gaia
@@ -63,7 +70,7 @@ spec:
             containerPort: {{ include "gaia-daemon.grpc" . }}
             protocol: TCP
         startupProbe:
-          failureThreshold: 60
+          failureThreshold: 600  # 5 hours, some forks require long init
           periodSeconds: 30
           timeoutSeconds: 10
           exec:

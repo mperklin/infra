@@ -72,9 +72,7 @@ Net
 Snapshot
 */}}
 {{- define "gaia-daemon.snapshot" -}}
-{{- if eq (include "gaia-daemon.net" .) "testnet" -}}
-    {{ .Values.snapshot.testnet }}
-{{- else if eq (include "gaia-daemon.net" .) "stagenet" -}}
+{{- if eq (include "gaia-daemon.net" .) "stagenet" -}}
     {{ .Values.snapshot.stagenet }}
 {{- else if eq (include "gaia-daemon.net" .) "mainnet" -}}
     {{ .Values.snapshot.mainnet }}
@@ -91,7 +89,7 @@ RPC Port
 {{- else if eq (include "gaia-daemon.net" .) "stagenet" -}}
     {{ .Values.service.port.stagenet.rpc }}
 {{- else -}}
-    {{ .Values.service.port.testnet.rpc }}
+    {{ .Values.service.port.mainnet.rpc }}
 {{- end -}}
 {{- end -}}
 
@@ -104,7 +102,7 @@ P2P Port
 {{- else if eq (include "gaia-daemon.net" .) "stagenet" -}}
     {{ .Values.service.port.stagenet.p2p }}
 {{- else -}}
-    {{ .Values.service.port.testnet.p2p }}
+    {{ .Values.service.port.mainnet.p2p }}
 {{- end -}}
 {{- end -}}
 
@@ -117,6 +115,6 @@ GRPC Port
 {{- else if eq (include "gaia-daemon.net" .) "stagenet" -}}
     {{ .Values.service.port.stagenet.grpc }}
 {{- else -}}
-    {{ .Values.service.port.testnet.grpc }}
+    {{ .Values.service.port.mainnet.grpc }}
 {{- end -}}
 {{- end -}}

@@ -9,9 +9,8 @@ data:
     set -euo pipefail
 
     FILE=/root/.gaia/.probe_last_height
-    ENDPOINT=localhost:$GAIA_DAEMON_SERVICE_PORT/status
 
-    STATUS=$(curl -s --fail -m 20 "$ENDPOINT") || exit 1
+    STATUS=$(curl -s --fail -m 20 http://localhost:26657/status) || exit 1
     if [ ! -f "$FILE" ]; then
       echo "$STATUS" | jq -r ".result.sync_info.latest_block_height" >$FILE
       exit 1
