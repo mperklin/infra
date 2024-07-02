@@ -320,11 +320,12 @@ deploy_genesis() {
 
 deploy_validator() {
   local args
-  [ "$NET" = "mainnet" ] && [ "$TYPE" != "daemons" ] && args="--set global.passwordSecret=arkeo-password --set global.mnemonicSecret=arkeo-mnemonic "
-  [ "$NET" = "stagenet" ] && [ "$TYPE" != "daemons" ] && args="--set global.passwordSecret=arkeo-password --set global.mnemonicSecret=arkeo-mnemonic "
+  [ "$NET" = "mainnet" ] && args="--set global.passwordSecret=arkeo-password"
+  [ "$NET" = "stagenet" ] && args="--set global.passwordSecret=arkeo-password"
   # shellcheck disable=SC2086
   helm diff upgrade -C 3 --install "$NAME" ./arkeo-stack -n "$NAME" \
     $args $EXTRA_ARGS \
+    --set global.mnemonicSecret=arkeo-mnemonic \
     --set global.net="$NET" \
     --set arkeo.type="validator"
   echo -e "=> Changes for a $boldgreen$TYPE$reset Arkeo Node on $boldgreen$NET$reset named $boldgreen$NAME$reset"
@@ -332,6 +333,7 @@ deploy_validator() {
   # shellcheck disable=SC2086
   helm upgrade --install "$NAME" ./arkeo-stack -n "$NAME" \
     --create-namespace $args $EXTRA_ARGS \
+    --set global.mnemonicSecret=arkeo-mnemonic \
     --set global.net="$NET" \
     --set arkeo.type="validator"
 

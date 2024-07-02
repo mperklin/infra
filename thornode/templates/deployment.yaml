@@ -92,17 +92,6 @@ spec:
               value: "{{ .Values.haltHeight }}"
             - name: NET
               value: {{ include "thornode.net" . }}
-            - name: SIGNER_NAME
-              value: {{ .Values.signer.name }}
-            - name: SIGNER_PASSWD
-              {{- if default .Values.signer.passwordSecret .Values.global.passwordSecret }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ default .Values.signer.passwordSecret .Values.global.passwordSecret }}
-                  key: password
-              {{- else}}
-              value: {{ .Values.signer.password }}
-              {{- end }}
             - name: CHAIN_ID
               value: {{ include "thornode.chainID" . }}
             - name: THOR_AUTO_STATE_SYNC_ENABLED
@@ -111,11 +100,6 @@ spec:
               value: "{{ .Values.statesync.snapshotInterval }}"
             - name: THOR_TENDERMINT_LOG_FORMAT
               value: "json"
-            - name: SIGNER_SEED_PHRASE
-              valueFrom:
-                secretKeyRef:
-                  name: {{ default .Values.signer.mnemonicSecret .Values.global.mnemonicSecret }}
-                  key: mnemonic
             {{- range $key, $value := .Values.env }}
             - name: {{ $key }}
               value: {{ $value | quote }}
