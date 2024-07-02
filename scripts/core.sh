@@ -320,8 +320,8 @@ deploy_genesis() {
 
 deploy_validator() {
   local args
-  [ "$NET" = "mainnet" ] && args="--set global.passwordSecret=arkeo-password"
-  [ "$NET" = "stagenet" ] && args="--set global.passwordSecret=arkeo-password"
+  [ "$NET" = "mainnet" ] && [ "$TYPE" != "daemons" ] && args="--set global.passwordSecret=arkeo-password"
+  [ "$NET" = "stagenet" ] && [ "$TYPE" != "daemons" ]&& args="--set global.passwordSecret=arkeo-password"
   # shellcheck disable=SC2086
   helm diff upgrade -C 3 --install "$NAME" ./arkeo-stack -n "$NAME" \
     $args $EXTRA_ARGS \

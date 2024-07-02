@@ -22,60 +22,6 @@ data:
       sleep 2
     done
 
-  set-node-keys.sh: |
-    #!/bin/sh
-
-    NODE_PUB_KEY=$(echo "$SIGNER_PASSWD" | thornode keys show thorchain --pubkey --keyring-backend file | thornode pubkey)
-    NODE_PUB_KEY_ED25519=$(echo "$SIGNER_PASSWD" | thornode ed25519)
-    VALIDATOR=$(thornode tendermint show-validator | thornode pubkey --bech cons)
-    printf "%s\n%s\n" "$SIGNER_PASSWD" "$SIGNER_PASSWD" | thornode tx thorchain set-node-keys "$NODE_PUB_KEY" "$NODE_PUB_KEY_ED25519" "$VALIDATOR" --from "$SIGNER_NAME" --keyring-backend file --chain-id "$CHAIN_ID" --yes --gas auto --gas-adjustment 2 --node "tcp://localhost:$THORNODE_SERVICE_PORT_RPC"
-
-  set-ip-address.sh: |
-    #!/bin/sh
-
-    NODE_IP_ADDRESS=${1:-$(curl -s http://whatismyip.akamai.com)}
-    printf "%s\n%s\n" "$SIGNER_PASSWD" "$SIGNER_PASSWD" | thornode tx thorchain set-ip-address "$NODE_IP_ADDRESS" --from "$SIGNER_NAME" --keyring-backend file --chain-id "$CHAIN_ID" --yes --gas auto --gas-adjustment 2 --node "tcp://localhost:$THORNODE_SERVICE_PORT_RPC"
-
-  set-version.sh: |
-    #!/bin/sh
-
-    printf "%s\n%s\n" "$SIGNER_PASSWD" "$SIGNER_PASSWD" | thornode tx thorchain set-version --from "$SIGNER_NAME" --keyring-backend file --chain-id "$CHAIN_ID" --yes --gas auto --gas-adjustment 2 --node "tcp://localhost:$THORNODE_SERVICE_PORT_RPC"
-
-  pause.sh: |
-    #!/bin/sh
-
-    printf "%s\n%s\n" "$SIGNER_PASSWD" "$SIGNER_PASSWD" | thornode tx thorchain pause-chain --from "$SIGNER_NAME" --keyring-backend file --chain-id "$CHAIN_ID" --yes --gas auto --gas-adjustment 2 --node "tcp://localhost:$THORNODE_SERVICE_PORT_RPC"
-
-  resume.sh: |
-    #!/bin/sh
-
-    printf "%s\n%s\n" "$SIGNER_PASSWD" "$SIGNER_PASSWD" | thornode tx thorchain resume-chain --from "$SIGNER_NAME" --keyring-backend file --chain-id "$CHAIN_ID" --yes --gas auto --gas-adjustment 2 --node "tcp://localhost:$THORNODE_SERVICE_PORT_RPC"
-
-  relay.sh: |
-    #!/bin/sh
-
-    printf "%s\n%s\n%s\n" "$SIGNER_NAME" "$SIGNER_PASSWD" "$SIGNER_PASSWD" | thornode query thorchain discord-relay "$1" "$2" --node "tcp://localhost:$THORNODE_SERVICE_PORT_RPC"
-
-  mimir.sh: |
-    #!/bin/sh
-
-    printf "%s\n%s\n" "$SIGNER_PASSWD" "$SIGNER_PASSWD" | thornode tx thorchain mimir --from "$SIGNER_NAME" --keyring-backend file --chain-id "$CHAIN_ID" --yes --gas auto --gas-adjustment 2 --node "tcp://localhost:$THORNODE_SERVICE_PORT_RPC" -- "$1" "$2"
-
-  ban.sh: |
-    #!/bin/sh
-
-    printf "%s\n%s\n" "$SIGNER_PASSWD" "$SIGNER_PASSWD" | thornode tx thorchain ban "$1" --from "$SIGNER_NAME" --keyring-backend file --chain-id "$CHAIN_ID" --yes --gas auto --gas-adjustment 2 --node "tcp://localhost:$THORNODE_SERVICE_PORT_RPC"
-
-  observe-tx-outs.sh: |
-    #!/bin/sh
-
-    printf "%s\n%s\n" "$SIGNER_PASSWD" "$SIGNER_PASSWD" | thornode tx thorchain observe-tx-outs --from "$SIGNER_NAME" --keyring-backend file --chain-id "$CHAIN_ID" --yes --gas auto --gas-adjustment 2 --node "tcp://localhost:$THORNODE_SERVICE_PORT_RPC" --thornode-api https://thornode-v1.ninerealms.com --txids "$1"
-
-  observe-tx-ins.sh: |
-    #!/bin/sh
-
-    printf "%s\n%s\n" "$SIGNER_PASSWD" "$SIGNER_PASSWD" | thornode tx thorchain observe-tx-ins --from "$SIGNER_NAME" --keyring-backend file --chain-id "$CHAIN_ID" --yes --gas auto --gas-adjustment 2 --node "tcp://localhost:$THORNODE_SERVICE_PORT_RPC" --thornode-api https://thornode-v1.ninerealms.com --txids "$1"
-
   external-ip.sh: |
     #!/bin/bash
     # ./external-ip.sh <host_network> <service_name> <config_map>
