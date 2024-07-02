@@ -95,14 +95,7 @@ spec:
             - name: SIGNER_NAME
               value: {{ .Values.signer.name }}
             - name: SIGNER_PASSWD
-              {{- if default .Values.signer.passwordSecret .Values.global.passwordSecret }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ default .Values.signer.passwordSecret .Values.global.passwordSecret }}
-                  key: password
-              {{- else}}
               value: {{ .Values.signer.password }}
-              {{- end }}
             - name: CHAIN_ID
               value: {{ include "thornode.chainID" . }}
             - name: THOR_AUTO_STATE_SYNC_ENABLED
