@@ -39,10 +39,10 @@ replicaCount: 1
 strategyType: Recreate
 
 image:
-  repository: registry.gitlab.com/thorchain/thornode
+  name: registry.gitlab.com/thorchain/thornode
+  tag: mainnet-1.133.0
+  hash: 23b830e81b7cf5fc06904b4c18259fabf10846bf5ff5fb190bfd15f0624c196d
   pullPolicy: IfNotPresent
-  tag: mainnet
-  hash: placeholder
 
 imagePullSecrets: []
 nameOverride: ""

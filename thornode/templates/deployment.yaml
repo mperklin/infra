@@ -61,7 +61,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: {{ include "thornode.image" . }}
+          image: {{ .Values.image.name }}:{{ .Values.image.tag }}@sha256:{{ .Values.image.hash }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
             -  /scripts/{{ .Values.type }}.sh
