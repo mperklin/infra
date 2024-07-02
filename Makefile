@@ -45,119 +45,62 @@ update-dependencies:
 update-trust-state: ## Updates statesync trusted height/hash and Midgard blockstore hashes from Nine Realms
 	@./scripts/update-trust-state.sh
 
-mnemonic: ## Retrieve and display current mnemonic for backup from your THORNode
-	@./scripts/mnemonic.sh
-
-password: ## Retrieve and display current password for backup from your THORNode
-	@./scripts/password.sh
-
-pods: ## Get THORNode Kubernetes pods
+pods: ## Get Kubernetes pods
 	@./scripts/pods.sh
 
-pre-install: pull update-dependencies ## Pre deploy steps for a THORNode (secret creation)
+pre-install: pull update-dependencies ## Pre deploy steps
 	@./scripts/pre-install.sh
 
-install: update-dependencies ## Deploy a THORNode
+install: update-dependencies ## Deploy
 	@./scripts/install.sh
 
-recycle: pull update-dependencies ## Destroy and recreate a THORNode recycling existing daemons to avoid re-sync
-	@./scripts/recycle.sh
-
-update: pull update-dependencies ## Update a THORNode to latest version
+update: pull update-dependencies ## Update a deployment to latest version
 	@./scripts/update.sh
 
-status: ## Display current status of your THORNode
+status: ## Display current status of your Arkeo stack
 	@./scripts/status.sh
 
-reset: ## Reset and resync a service from scratch on your THORNode. This command can take a while to sync back to 100%.
+reset: ## Reset and resync a service from scratch on your deployment. This command can take a while to sync back to 100%.
 	@./scripts/reset.sh
 
-hard-reset-thornode: ## Hard reset and resync thornode service from scratch on your THORNode, leaving no bak/* files.
-	@./scripts/hard-reset-thornode.sh
-
-backup: ## Backup specific files from either thornode of bifrost service of a THORNode.
-	@./scripts/backup.sh
-
-full-backup: ## Create volume snapshots and backups for both thornode and bifrost services.
-	@./scripts/full-backup.sh
-
-restore-backup: ## Restore backup specific files from either thornode of bifrost service of a THORNode.
-	@./scripts/restore-backup.sh
-
-snapshot: ## Snapshot a volume for a specific THORNode service.
+snapshot: ## Snapshot a volume for a specific service.
 	@./scripts/snapshot.sh
 
-restore-snapshot: ## Restore a volume for a specific THORNode service from a snapshot.
+restore-snapshot: ## Restore a volume for a specific service from a snapshot.
 	@./scripts/restore-snapshot.sh
 
 wait-ready: ## Wait for all pods to be in Ready state
 	@./scripts/wait-ready.sh
 
-destroy: ## Uninstall current THORNode
+destroy: ## Uninstall current deployment
 	@./scripts/destroy.sh
 
 export-state: ## Export chain state
 	@./scripts/export-state.sh
 
-hard-fork: ## Hard fork chain
-	@HARDFORK_BLOCK_HEIGHT=4786559 NEW_GENESIS_TIME='2022-03-22T01:38:16.219785087Z' CHAIN_ID='thorchain-mainnet-v1' IMAGE='registry.gitlab.com/thorchain/thornode:chaosnet-multichain-0.81.4' ./scripts/hard-fork.sh
-
-hard-fork-testnet: ## hard fork testnet
-	@HARDFORK_BLOCK_HEIGHT=1821177 NEW_GENESIS_TIME='2022-03-14T19:32:38.219785087Z' CHAIN_ID='thorchain-testnet-v2' IMAGE='registry.gitlab.com/thorchain/thornode:testnet-0.81.2' ./scripts/hard-fork.sh
-
-shell: ## Open a shell for a selected THORNode service
+shell: ## Open a shell for a selected service
 	@./scripts/shell.sh
 
-debug: ## Open a shell for THORNode service mounting volume to debug
+debug: ## Open a shell for mounting volume to debug
 	@./scripts/debug.sh
 
 recover-ninerealms:
 	@./scripts/recover-ninerealms.sh
 
-watch: ## Watch the THORNode pods in real time
+watch: ## Watch the pods in real time
 	@./scripts/watch.sh
 
-logs: ## Display logs for a selected THORNode service
+logs: ## Display logs for a selected service
 	@./scripts/logs.sh
 
-restart: ## Restart a selected THORNode service
+restart: ## Restart a selected service
 	@./scripts/restart.sh
 
-halt: ## Halt a selected THORNode service
+halt: ## Halt a selected service
 	@./scripts/halt.sh
-
-set-node-keys: ## Send a set-node-keys transaction to your THORNode
-	@./scripts/set-node-keys.sh
-
-set-version: ## Send a set-version transaction to your THORNode
-	@./scripts/set-version.sh
-
-set-ip-address: ## Send a set-ip-address transaction to your THORNode
-	@./scripts/set-ip-address.sh
 
 set-monitoring: ## Enable PagerDuty or Deadmans Snitch monitoring via Prometheus/Grafana re-deploy
 	@./scripts/set-monitoring.sh
-
-relay: ## Send a message that is relayed to a public Discord channel
-	@./scripts/relay.sh
-
-mimir: ## Send a mimir command to set a key/value
-	@./scripts/mimir.sh
-
-ban: ## Send a ban command with a node address
-	@./scripts/ban.sh
-
-pause: ## Send a pause-chain transaction to your THORNode
-	@./scripts/pause.sh
-
-resume: ## Send a resume-chain transaction to your THORNode
-	@./scripts/resume.sh
-
-telegram-bot: ## Deploy Telegram bot to monitor THORNode
-	@./scripts/telegram-bot.sh
-
-destroy-telegram-bot: ## Uninstall Telegram bot to monitor THORNode
-	@./scripts/destroy-telegram-bot.sh
 
 destroy-tools: destroy-prometheus destroy-loki destroy-dashboard ## Uninstall Prometheus/Grafana, Loki, Kubernetes dashboard
 

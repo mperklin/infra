@@ -59,4 +59,9 @@ avalanche-daemon:
   fullnameOverride: avalanche-daemon
 
 binance-smart-daemon:
+  enabled: false
   fullnameOverride: binance-smart-daemon
+
+thornode:
+  enabled: true
+  fullnameOverride: thornode

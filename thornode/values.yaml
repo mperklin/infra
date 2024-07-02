@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-net: testnet
+net: mainnet
 type: validator
 
 autoupdate:
@@ -29,7 +29,6 @@ env: {}
 
 debug: false
 chainID:
-  testnet: thorchain-testnet-v2
   mainnet: thorchain-mainnet-v1
   stagenet: thorchain-stagenet-v2
 
@@ -42,8 +41,8 @@ strategyType: Recreate
 image:
   repository: registry.gitlab.com/thorchain/thornode
   pullPolicy: IfNotPresent
-  tag: testnet
-  hash: "" # Not used for mocknet/testnet
+  tag: mainnet
+  hash: placeholder
 
 imagePullSecrets: []
 nameOverride: ""
@@ -53,9 +52,6 @@ service:
   type: ClusterIP
   port:
     api: 1317
-    testnet:
-      p2p: 26656
-      rpc: 26657
     stagenet:
       p2p: 27146
       rpc: 27147
@@ -66,9 +62,8 @@ service:
 persistence:
   enabled: true
   size:
-    testnet: 300Gi
     stagenet: 1024Gi
-    mainnet: 1.5Ti
+    mainnet: 10Ti
   accessMode: ReadWriteOnce
   # existingClaim: your-pvc
   # storageClass: "-"
@@ -84,10 +79,12 @@ serviceAccount:
 
 priorityClassName: ""
 
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 2000
 
-securityContext: {}
+securityContext:
+  {}
   # capabilities:
   #   drop:
   #   - ALL
@@ -97,8 +94,8 @@ securityContext: {}
 
 resources:
   requests:
-    cpu: 4
-    memory: 4Gi
+    cpu: 64
+    memory: 384Gi
   limits:
     # cpu: 2
     # memory: 4Gi
@@ -114,8 +111,8 @@ global:
     enabled: false
   images:
     alpineK8s:
-      tag: 1.18.2
-      hash: 768491682ca99e14498ddb62973a95a664a0525ca18e7ad0eaab2621d3124f5b
+      tag: 1.25.16
+      hash: 7480dd21404b26776642a286395db36310a83f8f93ae3393692d5c1e15a5e16a
     busybox:
       tag: latest
       hash: caa382c432891547782ce7140fb3b7304613d3b0438834dce1cad68896ab110a

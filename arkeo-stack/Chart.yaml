@@ -71,3 +71,8 @@ dependencies:
     repository: file://../binance-smart-daemon
     version: 0.1.0
     condition: binance-smart-daemon.enabled
+
+  - name: thornode
+    repository: file://../thornode
+    version: 0.1.0
+    condition: thornode.enabled

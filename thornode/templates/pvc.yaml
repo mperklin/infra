@@ -16,7 +16,7 @@ spec:
       {{- else if eq (include "thornode.net" .) "stagenet" }}
       storage: {{ .Values.persistence.size.stagenet | quote }}
       {{- else }}
-      storage: {{ .Values.persistence.size.testnet | quote }}
+      storage: {{ .Values.persistence.size.mainnet | quote }}
       {{- end }}
 {{- if .Values.persistence.storageClass }}
 {{- if (eq "-" .Values.persistence.storageClass) }}

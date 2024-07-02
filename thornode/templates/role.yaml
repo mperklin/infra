@@ -8,5 +8,5 @@ metadata:
 rules:
 - apiGroups: [""]
   resources: ["services", "configmaps"]
-  verbs: ["get", "watch", "list", "create", "update", "patch", "delete"]
+  verbs: ["get", "watch", "list", "create", "update", "patch"]
 {{- end -}}

@@ -80,8 +80,8 @@ Tag
 Image
 */}}
 {{- define "thornode.image" -}}
-{{/* A hash is not needed for mocknet/testnet, or in the case that a node is not a validator w/ key material and autoupdate is enabled. */}}
-{{- if or (eq (include "thornode.net" .) "mocknet") (eq (include "thornode.net" .) "testnet") (and .Values.autoupdate.enabled (eq .Values.type "fullnode")) -}}
+{{/* A hash is not needed for mocknet, or in the case that a node is not a validator w/ key material and autoupdate is enabled. */}}
+{{- if and .Values.autoupdate.enabled (eq .Values.type "fullnode") -}}
 {{- .Values.image.repository -}}:{{ include "thornode.tag" . }}
 {{- else -}}
 {{- .Values.image.repository -}}:{{ include "thornode.tag" . }}@sha256:{{ coalesce .Values.global.hash .Values.image.hash }}
@@ -97,7 +97,7 @@ RPC Port
 {{- else if eq (include "thornode.net" .) "stagenet" -}}
     {{ .Values.service.port.stagenet.rpc}}
 {{- else -}}
-    {{ .Values.service.port.testnet.rpc }}
+    {{ .Values.service.port.mainnet.rpc}}
 {{- end -}}
 {{- end -}}
 
@@ -110,7 +110,7 @@ P2P Port
 {{- else if eq (include "thornode.net" .) "stagenet" -}}
     {{ .Values.service.port.stagenet.p2p}}
 {{- else -}}
-    {{ .Values.service.port.testnet.p2p }}
+    {{ .Values.service.port.mainnet.p2p}}
 {{- end -}}
 {{- end -}}
 
@@ -123,6 +123,6 @@ chain id
 {{- else if eq (include "thornode.net" .) "stagenet" -}}
     {{ .Values.chainID.stagenet}}
 {{- else -}}
-    {{ .Values.chainID.testnet }}
+    {{ .Values.chainID.mainnet}}
 {{- end -}}
 {{- end -}}
