@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "osmosis-daemon.fullname" . }}-scripts
+data:
+  probe.sh: |
+    #!/bin/bash
+
+    set -euo pipefail
+
+    FILE=/root/.osmosis/.probe_last_height
+
+    STATUS=$(curl -s --fail -m 20 http://localhost:26657/status) || exit 1
+    if [ ! -f "$FILE" ]; then
+      echo "$STATUS" | jq -r ".result.sync_info.latest_block_height" >$FILE
+      exit 1
+    fi
+
+    OLD=$(cat $FILE)
+    echo "$STATUS" | jq -r ".result.sync_info.latest_block_height" > $FILE
+    CURRENT=$(cat $FILE)
+    [ "$OLD" == "$CURRENT" ] && exit 1 || exit 0
+
+  init.sh: |
+    #!/bin/sh
+
+    set -euo pipefail
+
+    mkdir -p /root/.osmosis/config
+
+    # pull genesis if it does not exist
+    if [ ! -f "/root/.osmosis/config/genesis.json" ]; then
+      cd /root/.osmosis/config
+      wget https://github.com/osmosis-labs/networks/raw/main/osmosis-1/genesis.json
+    fi
+
+    # pull the latest address book
+    if [ -f /root/.osmosis/config/addrbook.json ]; then
+      mv /root/.osmosis/config/addrbook.json /root/.osmosis/config/addrbook.json.bak
+      wget -O /root/.osmosis/config/addrbook.json https://quicksync.io/addrbook.osmosis.json || mv addrbook.json.bak addrbook.json
+    else
+      wget -O /root/.osmosis/config/addrbook.json https://quicksync.io/addrbook.osmosis.json
+    fi
+
+    # skip snapshot pull and cleanup tar if we already have a data directory
+    if [ -d "/root/.osmosis/data" ]; then
+      echo "cleaning snapshot data..."
+      rm -f /root/.osmosis/*.lz4
+      exit 0
+    fi
+
+    cd /root/.osmosis
+    apk add aria2 curl jq lz4
+
+    # fetch snapshot url
+    #URL=`curl -L https://quicksync.io/osmosis.json | jq -r '.[] |select(.file=="osmosis-1-pruned")|.url'`
+    # OVERRIDE
+    URL=https://dl-eu2.ccvalidators.com/SNAPSHOTS/archive/osmosis/osmosis-1_17407425.tar.lz4
+
+    # clean stale snapshots
+    if ls /root/.osmosis/osmosis-1-* >/dev/null 2>&1; then
+      ls /root/.osmosis/osmosis-1-* | while read line; do
+        if [ "$(basename $URL)" = "$(basename $line)" ] || [ "$(basename $URL).aria2" = "$(basename $line)" ]; then
+          echo "leaving snapshot to resume: $line"
+        else
+          echo "cleaning stale snapshot: $line"
+          rm $line
+        fi
+      done
+    fi
+
+    # pull snapshot
+    aria2c -c -x5 $URL
+    lz4 -d `basename $URL` | tar xf -
+
+    # cleanup
+    rm /root/.osmosis/*.lz4

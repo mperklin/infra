@@ -39,6 +39,9 @@ dogecoin-daemon:
 gaia-daemon:
   enabled: true
 
+osmosis-daemon:
+  enabled: true
+
 avalanche-daemon:
   enabled: false
 
