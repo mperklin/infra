@@ -63,7 +63,7 @@ dependencies:
     condition: gaia-daemon.enabled
 
   - name: osmosis-daemon
-    repository: file://../osmosis--daemon
+    repository: file://../osmosis-daemon
     version: 0.1.0
     condition: osmosis--daemon.enabled
 
