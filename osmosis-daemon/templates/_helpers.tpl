@@ -81,6 +81,19 @@ Snapshot
 
 
 {{/*
+REST Port
+*/}}
+{{- define "osmosis-daemon.rest" -}}
+{{- if eq (include "osmosis-daemon.net" .) "mainnet" -}}
+    {{ .Values.service.port.mainnet.rest }}
+{{- else if eq (include "osmosis-daemon.net" .) "stagenet" -}}
+    {{ .Values.service.port.stagenet.rest }}
+{{- else -}}
+    {{ .Values.service.port.mainnet.rest }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 RPC Port
 */}}
 {{- define "osmosis-daemon.rpc" -}}

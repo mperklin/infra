@@ -60,6 +60,7 @@ spec:
         ports:
           - name: rest
             containerPort: {{ include "osmosis-daemon.rest" . }}
+            protocol: TCP
           - name: rpc
             containerPort: {{ include "osmosis-daemon.rpc" . }}
             protocol: TCP
